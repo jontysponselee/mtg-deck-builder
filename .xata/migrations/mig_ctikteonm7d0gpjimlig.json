@@ -1,0 +1,69 @@
+{
+  "done": true,
+  "migration": {
+    "name": "mig_ctikteonm7d0gpjimlig",
+    "operations": [
+      {
+        "create_table": {
+          "name": "users",
+          "columns": [
+            {
+              "name": "name",
+              "type": "text"
+            },
+            {
+              "name": "email",
+              "type": "text"
+            },
+            {
+              "name": "bio",
+              "type": "text"
+            },
+            {
+              "name": "xata_id",
+              "type": "text",
+              "check": {
+                "name": "users_xata_id_length_xata_id",
+                "constraint": "length(\"xata_id\") < 256"
+              },
+              "unique": true,
+              "default": "'rec_' || xata_private.xid()"
+            },
+            {
+              "name": "xata_version",
+              "type": "integer",
+              "default": "0"
+            },
+            {
+              "name": "xata_createdat",
+              "type": "timestamptz",
+              "default": "now()"
+            },
+            {
+              "name": "xata_updatedat",
+              "type": "timestamptz",
+              "default": "now()"
+            }
+          ]
+        }
+      },
+      {
+        "sql": {
+          "up": "ALTER TABLE \"users\" REPLICA IDENTITY FULL",
+          "onComplete": true
+        }
+      },
+      {
+        "sql": {
+          "up": "CREATE TRIGGER xata_maintain_metadata_trigger_pgroll\n  BEFORE INSERT OR UPDATE\n  ON \"users\"\n  FOR EACH ROW\n  EXECUTE FUNCTION xata_private.maintain_metadata_trigger_pgroll()",
+          "onComplete": true
+        }
+      }
+    ]
+  },
+  "migrationType": "pgroll",
+  "name": "mig_ctikteonm7d0gpjimlig",
+  "parent": "mig_ctiackcjfdkjuj8f3eqg",
+  "schema": "public",
+  "startedAt": "2024-12-20T11:02:19.620876Z"
+}
