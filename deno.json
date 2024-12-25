@@ -4,10 +4,14 @@
     "check": "deno fmt --check && deno lint && deno check **/*.ts && deno check **/*.tsx",
     "cli": "echo \"import '\\$fresh/src/dev/cli.ts'\" | deno run --unstable -A -",
     "manifest": "deno task cli manifest $(pwd)",
-    "start": "deno run -A --watch=static/,routes/ dev.ts",
-    "build": "deno run -A dev.ts build",
+    "start": "(deno task watch:deno & deno task watch:css)",
+    "build": "deno task build:css && deno task build:app",
     "preview": "deno run -A main.ts",
-    "update": "deno run -A -r https://fresh.deno.dev/update ."
+    "update": "deno run -A -r https://fresh.deno.dev/update .",
+    "watch:app": "deno run -A --watch=static/,routes/ dev.ts",
+    "watch:css": "sass --watch ./styles/main.scss ./static/styles.css",
+    "build:app": "deno run -A dev.ts build",
+    "build:css": "sass --style=compressed ./styles/main.scss ./static/styles.css --no-source-map",
   },
   "lint": {
     "rules": {
@@ -22,6 +26,7 @@
   ],
   "imports": {
     "$fresh/": "https://deno.land/x/fresh@1.7.3/",
+    "bulma": "npm:bulma@^1.0.2",
     "preact": "https://esm.sh/preact@10.22.0",
     "preact/": "https://esm.sh/preact@10.22.0/",
     "@preact/signals": "https://esm.sh/*@preact/signals@1.2.2",

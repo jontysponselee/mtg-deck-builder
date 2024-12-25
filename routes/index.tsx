@@ -10,13 +10,14 @@ export default async function Home() {
     const postTitles = await getPostTitles();
 
     return (
-        <div class="px-4 py-8 mx-auto bg-[#86efac]">
-            <div class="max-w-screen-md mx-auto flex flex-col items-center justify-center">
-                <h1 class="text-4xl font-bold">Welcome to MTG Deck Builder</h1>
+        <div class="container columns is-centered">
+            <div>
+                <h1 class="title">Welcome to MTG Deck Builder</h1>
                 <p class="my-4">
                     This is an example and will be removed later on.
                 </p>
-                <table>
+                <button class="button is-primary">Test button</button>
+                <table class="table">
                     <thead>
                     <tr>
                         <th>Title</th>
