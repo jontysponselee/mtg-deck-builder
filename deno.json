@@ -5,13 +5,12 @@
     "cli": "echo \"import '\\$fresh/src/dev/cli.ts'\" | deno run --unstable -A -",
     "manifest": "deno task cli manifest $(pwd)",
     "start": "(deno task watch:deno & deno task watch:css)",
-    "build": "deno task build:css && deno task build:app",
+    "build": "deno run -A dev.ts build",
     "preview": "deno run -A main.ts",
     "update": "deno run -A -r https://fresh.deno.dev/update .",
     "watch:app": "deno run -A --watch=static/,routes/ dev.ts",
     "watch:css": "sass --watch ./styles/main.scss ./static/styles.css",
-    "build:app": "deno run -A dev.ts build",
-    "build:css": "sass --style=compressed ./styles/main.scss ./static/styles.css --no-source-map",
+    "build:css": "sass --style=compressed ./styles/main.scss ./static/styles.css --no-source-map"
   },
   "lint": {
     "rules": {

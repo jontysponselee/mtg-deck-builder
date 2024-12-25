@@ -23,6 +23,12 @@ jobs:
         with:
           deno-version: v2.x
 
+      - name: Compile CSS from SCSS files
+        uses: gha-utilities/sass-build@v0.6.0
+        with:
+          source: styles/main.scss
+          destination: static/styles.css
+
       - name: Build step
         run: "deno task build"
 
