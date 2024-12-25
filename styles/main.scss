@@ -1,0 +1,11 @@
+@import "https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css";
+
+:root {
+  --bulma-primary-h: 233deg;
+  --bulma-primary-s: 100%;
+  --bulma-primary-l: 70%;
+}
+
+.is-full-page-height {
+  height: 100vh;
+}
