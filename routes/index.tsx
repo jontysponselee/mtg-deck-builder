@@ -1,35 +1,41 @@
-import {getXataClient} from "../lib/xata.ts";
+import { Handlers } from "$fresh/server.ts";
 
-async function getPostTitles() {
-    const xata = getXataClient();
+import { getXataClient } from "../lib/xata.ts";
+import { AddDeckForm } from "../components/deck/AddDeckForm.tsx";
+import { DeckList } from "../components/deck/DeckList.tsx";
 
-    return await xata.db.posts.select(["title"]).getAll();
+async function getDecks() {
+  const xata = getXataClient();
+
+  return await xata.db.decks.select(["name", "xata_id"]).getAll();
 }
 
-export default async function Home() {
-    const postTitles = await getPostTitles();
+export const handler: Handlers = {
+  async POST(req, ctx) {
+    const form = await req.formData();
+    const name = form.get("name")?.toString();
 
-    return (
-        <div class="container columns is-centered">
-            <div>
-                <h1 class="title">Welcome to MTG Deck Builder</h1>
-                <p class="my-4">
-                    This is an example and will be removed later on.
-                </p>
-                <button class="button is-primary">Test button</button>
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>Title</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {postTitles.map(({title}) => (
-                        <tr><td>{title}</td></tr>
-                    ))}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    );
+    if (!name) return ctx.render();
+
+    await getXataClient().db.decks.create({ name });
+
+    return ctx.render();
+  },
+};
+
+export default async function Home() {
+  const decks = await getDecks();
+
+  return (
+    <div class="container is-fluid mt-5">
+      <div>
+        <h1 class="title">Welcome to MTG Deck Builder</h1>
+        <p class="my-4">
+          Manage your decks.
+        </p>
+        <AddDeckForm />
+        <DeckList decks={decks} />
+      </div>
+    </div>
+  );
 }

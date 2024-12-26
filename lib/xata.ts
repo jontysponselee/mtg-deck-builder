@@ -8,127 +8,10 @@ import type {
 
 const tables = [
   {
-    name: "posts",
+    name: "decks",
     checkConstraints: {
-      posts_xata_id_length_xata_id: {
-        name: "posts_xata_id_length_xata_id",
-        columns: ["xata_id"],
-        definition: "CHECK ((length(xata_id) < 256))",
-      },
-    },
-    foreignKeys: {
-      fk_users: {
-        name: "fk_users",
-        columns: ["author"],
-        referencedTable: "users",
-        referencedColumns: ["xata_id"],
-        onDelete: "NO ACTION",
-      },
-    },
-    primaryKey: [],
-    uniqueConstraints: {
-      _pgroll_new_posts_xata_id_key: {
-        name: "_pgroll_new_posts_xata_id_key",
-        columns: ["xata_id"],
-      },
-    },
-    columns: [
-      {
-        name: "author",
-        type: "link",
-        link: { table: "users" },
-        notNull: true,
-        unique: false,
-        defaultValue: null,
-        comment: '{"xata.link":"users"}',
-      },
-      {
-        name: "created_at",
-        type: "timestamp without time zone",
-        notNull: true,
-        unique: false,
-        defaultValue: null,
-        comment: "",
-      },
-      {
-        name: "labels",
-        type: "multiple",
-        notNull: true,
-        unique: false,
-        defaultValue: null,
-        comment: "",
-      },
-      {
-        name: "slug",
-        type: "text",
-        notNull: true,
-        unique: false,
-        defaultValue: null,
-        comment: "",
-      },
-      {
-        name: "text",
-        type: "text",
-        notNull: true,
-        unique: false,
-        defaultValue: null,
-        comment: "",
-      },
-      {
-        name: "title",
-        type: "text",
-        notNull: true,
-        unique: false,
-        defaultValue: null,
-        comment: "",
-      },
-      {
-        name: "views",
-        type: "int",
-        notNull: true,
-        unique: false,
-        defaultValue: null,
-        comment: "",
-      },
-      {
-        name: "xata_createdat",
-        type: "datetime",
-        notNull: true,
-        unique: false,
-        defaultValue: "now()",
-        comment: "",
-      },
-      {
-        name: "xata_id",
-        type: "text",
-        notNull: true,
-        unique: true,
-        defaultValue: "('rec_'::text || (xata_private.xid())::text)",
-        comment: "",
-      },
-      {
-        name: "xata_updatedat",
-        type: "datetime",
-        notNull: true,
-        unique: false,
-        defaultValue: "now()",
-        comment: "",
-      },
-      {
-        name: "xata_version",
-        type: "int",
-        notNull: true,
-        unique: false,
-        defaultValue: "0",
-        comment: "",
-      },
-    ],
-  },
-  {
-    name: "users",
-    checkConstraints: {
-      users_xata_id_length_xata_id: {
-        name: "users_xata_id_length_xata_id",
+      decks_xata_id_length_xata_id: {
+        name: "decks_xata_id_length_xata_id",
         columns: ["xata_id"],
         definition: "CHECK ((length(xata_id) < 256))",
       },
@@ -136,28 +19,12 @@ const tables = [
     foreignKeys: {},
     primaryKey: [],
     uniqueConstraints: {
-      _pgroll_new_users_xata_id_key: {
-        name: "_pgroll_new_users_xata_id_key",
+      _pgroll_new_decks_xata_id_key: {
+        name: "_pgroll_new_decks_xata_id_key",
         columns: ["xata_id"],
       },
     },
     columns: [
-      {
-        name: "bio",
-        type: "text",
-        notNull: true,
-        unique: false,
-        defaultValue: null,
-        comment: "",
-      },
-      {
-        name: "email",
-        type: "text",
-        notNull: true,
-        unique: false,
-        defaultValue: null,
-        comment: "",
-      },
       {
         name: "name",
         type: "text",
@@ -205,15 +72,11 @@ const tables = [
 export type SchemaTables = typeof tables;
 export type InferredTypes = SchemaInference<SchemaTables>;
 
-export type Posts = InferredTypes["posts"];
-export type PostsRecord = Posts & XataRecord;
-
-export type Users = InferredTypes["users"];
-export type UsersRecord = Users & XataRecord;
+export type Decks = InferredTypes["decks"];
+export type DecksRecord = Decks & XataRecord;
 
 export type DatabaseSchema = {
-  posts: PostsRecord;
-  users: UsersRecord;
+  decks: DecksRecord;
 };
 
 const DatabaseClient = buildClient();

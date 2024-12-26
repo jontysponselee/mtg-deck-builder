@@ -1,0 +1,18 @@
+{
+  "done": true,
+  "migration": {
+    "name": "mig_ctm9600a46b8cqno908g",
+    "operations": [
+      {
+        "drop_table": {
+          "name": "posts"
+        }
+      }
+    ]
+  },
+  "migrationType": "pgroll",
+  "name": "mig_ctm9600a46b8cqno908g",
+  "parent": "mig_ctm95s0nm7d0gpjin9qg",
+  "schema": "public",
+  "startedAt": "2024-12-25T23:19:29.014437Z"
+}
