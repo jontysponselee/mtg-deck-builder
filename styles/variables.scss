@@ -1,0 +1,13 @@
+// https://github.com/jgthms/bulma/blob/master/sass/utilities/initial-variables.sass#L56,L64
+$bulma-gap: 32px;
+$bulma-full-gap: calc(2 * $bulma-gap);
+$bulma-breakpoint-tablet: 769px;
+$bulma-breakpoint-desktop: calc(960px + $bulma-full-gap);
+$bulma-breakpoint-widescreen: calc(1152px + $bulma-full-gap);
+$bulma-breakpoint-fullhd: calc(1344px + $bulma-full-gap);
+
+:root {
+  --bulma-primary-h: 233deg;
+  --bulma-primary-s: 100%;
+  --bulma-primary-l: 70%;
+}
