@@ -38,6 +38,7 @@ export default function DeckRow(
             <form method="post">
               <div class="field has-addons">
                 <div class="control add-decks-form">
+                  <input type="hidden" name="editDeck" />
                   <input hidden name="id" value={deck.id} />
                   <input
                     ref={nameInputRef}
