@@ -1,7 +1,7 @@
 {
   "databaseURL": "https://Jonty-Sponselee-s-workspace-2upcsj.eu-central-1.xata.sh/db/mtg-deck-builder",
   "codegen": {
-    "output": "lib/xata.ts",
+    "output": "src/lib/xata.ts",
     "moduleType": "deno"
   }
 }

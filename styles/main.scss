@@ -20,9 +20,15 @@
     }
   }
 
-  &__deck-list-actions {
-    &:hover {
-      color: var(--bulma-primary)
+  .deck-row-actions {
+    display: flex;
+
+    &__edit:hover {
+      color: var(--bulma-primary);
+    }
+
+    &__delete:hover {
+      color: var(--bulma-danger);
     }
   }
 }

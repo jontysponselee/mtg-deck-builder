@@ -1,22 +1,23 @@
 import { useSignal } from "@preact/signals";
 
 import DeckRow from "./DeckRow.tsx";
-import { DecksRecord } from "../../lib/xata.ts";
+import { DecksRecord } from "../../src/lib/xata.ts";
 import { useEffect } from "preact/hooks";
 
 export interface DeckListProps {
-  editedName: string | null;
+  postTimestamp: number | null;
   decks: Partial<DecksRecord>[];
+  postType: "update" | "delete";
 }
 
-export function DeckListIsland({ decks, editedName }: DeckListProps) {
+export function DeckList(props: DeckListProps) {
   const isEditingId = useSignal<string | undefined>(undefined);
 
   useEffect(() => {
-    if (!editedName) return;
+    if (props.postType !== "update") return;
 
     isEditingId.value = undefined;
-  }, [editedName]);
+  }, [props.postTimestamp]);
 
   return (
     <table class="table is-fullwidth is-striped">
@@ -27,8 +28,18 @@ export function DeckListIsland({ decks, editedName }: DeckListProps) {
         </tr>
       </thead>
       <tbody>
-        {decks.map((deck) => (
+        {props.decks.length === 0 && (
+          <tr>
+            <td colSpan={2}>
+              <p>No decks yet, create one.</p>
+            </td>
+          </tr>
+        )}
+        {props.decks.map((deck) => (
           <DeckRow
+            postDeleteTimestamp={props.postType === "delete"
+              ? props.postTimestamp
+              : null}
             isEditingId={isEditingId.value}
             onIsEditing={() => isEditingId.value = deck.id}
             deck={deck}

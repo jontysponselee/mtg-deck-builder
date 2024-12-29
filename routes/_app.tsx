@@ -1,5 +1,10 @@
 import { type PageProps } from "$fresh/server.ts";
 import { config } from "../config.ts";
+import { ModalContainer } from "../islands/ActionModal.tsx";
+
+/** @todo
+ * - Create stack for closeable items when pressing "Escape" (document.activeElement is not always representable of the active screen)
+ */
 
 export default function App({ Component }: PageProps) {
   return (
@@ -19,8 +24,9 @@ export default function App({ Component }: PageProps) {
         >
         </script>
       </head>
-      <body>
+      <body f-client-nav>
         <Component />
+        <ModalContainer />
       </body>
     </html>
   );

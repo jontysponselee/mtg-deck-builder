@@ -1,76 +1,49 @@
 import { defineRoute, Handlers } from "$fresh/server.ts";
-
-import { DecksRecord, getXataClient } from "../lib/xata.ts";
-import { AddDeckForm } from "../islands/deck/AddDeckForm.tsx";
 import { Head, Partial } from "$fresh/runtime.ts";
-import { DeckListIsland } from "../islands/deck/DeckListIsland.tsx";
+
+import { AddDeckForm } from "../islands/deck/AddDeckForm.tsx";
+import { DeckList } from "../islands/deck/DeckList.tsx";
 import { Notification } from "../islands/Notification.tsx";
+import { DeckRepository } from "../src/domain/deck/DeckRepository.ts";
+import { genericError, ResponseMessage } from "../src/utils/ResponseMessage.tsx";
+import { DeckService } from "../src/domain/deck/DeckService.ts";
 
-/** @todo
- * - Pagination for list
- * - Empty list message
- */
-
-interface Props {
-  addDeck?: boolean;
-  editDeck?: boolean;
-  name?: string;
-  message?: string | false;
+interface ContextData {
+  postType?: "create" | "update" | "delete";
+  postTimestamp?: number;
+  message: ResponseMessage;
 }
 
-const MAX_DECKS = 50;
-
-async function addDeck(name: DecksRecord["name"]) {
-  const recordCount =
-    (await getXataClient().db.decks.select(["xata_id"]).getAll()).length;
-
-  if (recordCount >= MAX_DECKS) return false;
-
-  return getXataClient().db.decks.create({ name });
-}
-
-function getDecks() {
-  return getXataClient().db.decks.select(["name", "xata_id"]).getAll();
-}
-
-function editDeck(id: DecksRecord["id"], name: DecksRecord["name"]) {
-  return getXataClient().db.decks.update(id, {
-    name,
-  });
-}
-
-export const handler: Handlers<Props> = {
+export const handler: Handlers<ContextData> = {
   async POST(req, ctx) {
     const form = await req.formData();
+
     const name = form.get("name")?.toString();
     const id = form.get("id")?.toString();
+    const postType = form.get("postType")
+      ?.toString() as ContextData["postType"];
 
-    if (!name) return ctx.render();
-
-    if (form.has("addDeck")) {
-      const result = await addDeck(name);
-
-      if (!result) {
-        return ctx.render({
-          message: `Cannot create more than ${MAX_DECKS} decks`,
-        });
-      }
-
-      return ctx.render({ addDeck: true, name });
-    } else if (form.has("editDeck")) {
-      if (!id) return ctx.render();
-
-      await editDeck(id, name);
-
-      return ctx.render({ editDeck: true, name });
+    let message: ResponseMessage;
+    switch (postType) {
+      case "create":
+        message = await DeckService.create(name);
+        break;
+      case "update":
+        message = await DeckService.update(id, name);
+        break;
+      case "delete":
+        message = await DeckService.delete(id);
+        break;
+      default:
+        message = genericError;
     }
 
-    return ctx.render();
+    return ctx.render({ message, postType, postTimestamp: Date.now() });
   },
 };
 
-export default defineRoute<Props>(async (_, ctx) => {
-  const decks = await getDecks();
+export default defineRoute<ContextData>(async (_, ctx) => {
+  const decks = await DeckRepository.getAll();
 
   return (
     <>
@@ -78,7 +51,10 @@ export default defineRoute<Props>(async (_, ctx) => {
         <title>Decks</title>
       </Head>
       <Partial name="notification">
-        <Notification content={ctx.data?.message} />
+        <Notification
+          message={ctx.data?.message}
+          postTimestamp={ctx.data?.postTimestamp}
+        />
       </Partial>
       <div class="decks container is-fluid mt-5" f-client-nav>
         <div>
@@ -88,12 +64,15 @@ export default defineRoute<Props>(async (_, ctx) => {
           </p>
           <Partial name="addDeck">
             <AddDeckForm
-              addedName={ctx.data?.addDeck ? ctx.data?.name : null}
+              postTimestamp={["create", "delete"].includes(ctx.data?.postType)
+                ? ctx.data?.postTimestamp
+                : null}
             />
           </Partial>
           <Partial name="deckList">
-            <DeckListIsland
-              editedName={ctx.data?.editDeck ? ctx.data?.name : null}
+            <DeckList
+              postType={ctx.data?.postType}
+              postTimestamp={ctx.data?.postTimestamp}
               decks={decks}
             />
           </Partial>

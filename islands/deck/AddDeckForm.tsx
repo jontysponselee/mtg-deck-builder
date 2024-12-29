@@ -1,10 +1,10 @@
 import { useEffect, useRef } from "preact/hooks";
 
 interface AddDeckFormProps {
-  addedName: string | null;
+  postTimestamp: number | null;
 }
 
-export function AddDeckForm({ addedName }: AddDeckFormProps) {
+export function AddDeckForm({ postTimestamp }: AddDeckFormProps) {
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -14,17 +14,17 @@ export function AddDeckForm({ addedName }: AddDeckFormProps) {
   }, []);
 
   useEffect(() => {
-    if (addedName && inputRef.current && addedName === inputRef.current.value) {
+    if (inputRef.current && postTimestamp) {
       inputRef.current.value = "";
       inputRef.current.focus();
     }
-  }, [addedName, inputRef.current]);
+  }, [postTimestamp, inputRef.current]);
 
   return (
     <form method="post" class="mb-3">
       <div class="field has-addons">
         <div class="control decks__add-decks-form">
-          <input type="hidden" name="addDeck" />
+          <input type="hidden" name="postType" value="create" />
           <input
             ref={inputRef}
             class="input"

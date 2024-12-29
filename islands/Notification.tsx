@@ -1,19 +1,66 @@
-import { useRef } from "preact/hooks";
+import { useSignal } from "@preact/signals";
+import { useEffect } from "preact/hooks";
 
-export function Notification({ content }: { content: string | false }) {
-    const notificationRef = useRef<HTMLDivElement>(null);
-  
-    function removeNotification(){
-        if(!notificationRef.current) return;
+interface NotificationProps {
+  message?: {
+    type: "error" | "warning" | "success";
+    content: string;
+  };
+  postTimestamp: number;
+}
 
-        notificationRef.current.parentNode?.removeChild(notificationRef.current)
+const typeToClass: Record<
+  Required<NotificationProps>["message"]["type"],
+  string
+> = {
+  error: "is-danger",
+  warning: "is-warning",
+  success: "is-success",
+};
+
+export function Notification({ postTimestamp, message }: NotificationProps) {
+  const showNotification = useSignal(false);
+
+  useEffect(() => {
+    if (!message) return;
+
+    showNotification.value = true;
+  }, [message, postTimestamp]);
+
+  if (!showNotification.value || !message) return;
+
+  return (
+    <NotificationContent
+      onClose={() => showNotification.value = false}
+      message={message}
+    />
+  );
+}
+
+interface NotificationContentProps
+  extends Required<Pick<NotificationProps, "message">> {
+  onClose: () => void;
+}
+
+function NotificationContent(props: NotificationContentProps) {
+  useEffect(() => {
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        props.onClose();
+      }
     }
 
-    return content &&
-    (
-      <div class="notification is-warning" ref={notificationRef}>
-        <button class="delete" onClick={removeNotification} />
-        {content}
-      </div>
-    );
+    document.addEventListener("keydown", onKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, []);
+
+  return (
+    <div class={`notification ${typeToClass[props.message.type]}`}>
+      <button class="delete" onClick={props.onClose} />
+      {props.message.content}
+    </div>
+  );
 }
