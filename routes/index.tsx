@@ -4,11 +4,9 @@ import { DecksRecord, getXataClient } from "../lib/xata.ts";
 import { AddDeckForm } from "../islands/deck/AddDeckForm.tsx";
 import { Head, Partial } from "$fresh/runtime.ts";
 import { DeckListIsland } from "../islands/deck/DeckListIsland.tsx";
+import { Notification } from "../islands/Notification.tsx";
 
 /** @todo
- * - Skeleton frames
- * - Max entries 50
- *   - API error Toast
  * - Pagination for list
  * - Empty list message
  */
@@ -16,10 +14,18 @@ import { DeckListIsland } from "../islands/deck/DeckListIsland.tsx";
 interface Props {
   addDeck?: boolean;
   editDeck?: boolean;
-  name: string;
+  name?: string;
+  message?: string | false;
 }
 
-function addDeck(name: DecksRecord["name"]) {
+const MAX_DECKS = 50;
+
+async function addDeck(name: DecksRecord["name"]) {
+  const recordCount =
+    (await getXataClient().db.decks.select(["xata_id"]).getAll()).length;
+
+  if (recordCount >= MAX_DECKS) return false;
+
   return getXataClient().db.decks.create({ name });
 }
 
@@ -42,7 +48,13 @@ export const handler: Handlers<Props> = {
     if (!name) return ctx.render();
 
     if (form.has("addDeck")) {
-      await addDeck(name);
+      const result = await addDeck(name);
+
+      if (!result) {
+        return ctx.render({
+          message: `Cannot create more than ${MAX_DECKS} decks`,
+        });
+      }
 
       return ctx.render({ addDeck: true, name });
     } else if (form.has("editDeck")) {
@@ -65,6 +77,9 @@ export default defineRoute<Props>(async (_, ctx) => {
       <Head>
         <title>Decks</title>
       </Head>
+      <Partial name="notification">
+        <Notification content={ctx.data?.message} />
+      </Partial>
       <div class="decks container is-fluid mt-5" f-client-nav>
         <div>
           <h1 class="title">Welcome to MTG Deck Builder</h1>
