@@ -63,12 +63,13 @@ export default defineRoute<ContextData>(async (_, ctx) => {
           postTimestamp={ctx.data?.postTimestamp}
         />
       </Partial>
-      <div class="decks container is-fluid mt-5" f-client-nav>
+      <div class="decks container is-fluid mt-5">
         <div>
           <h1 class="title">Welcome to MTG Deck Builder</h1>
           <p class="my-4">
             Manage your decks.
           </p>
+          <div f-client-nav>
           <Partial name="addDeck">
             <AddDeckForm
               postTimestamp={["create", "delete"].includes(ctx.data?.postType)
@@ -82,7 +83,8 @@ export default defineRoute<ContextData>(async (_, ctx) => {
               postTimestamp={ctx.data?.postTimestamp}
               decks={decks}
             />
-          </Partial>
+          </Partial>  
+          </div>
         </div>
       </div>
     </>

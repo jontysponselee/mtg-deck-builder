@@ -32,7 +32,7 @@ export default function App({ Component }: PageProps) {
         >
         </script>
       </head>
-      <body f-client-nav>
+      <body>
         <Component />
         <ModalContainer />
       </body>
