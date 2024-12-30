@@ -38,5 +38,3 @@ jobs:
           project: "jonty-mtg-deck-builder"
           entrypoint: "main.ts"
           root: "."
-          
-          

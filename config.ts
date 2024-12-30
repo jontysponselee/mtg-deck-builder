@@ -1,3 +1,3 @@
 export const config = {
-    appName: "MTG DeBu"
-}
+  appName: "MTG DeBu",
+};

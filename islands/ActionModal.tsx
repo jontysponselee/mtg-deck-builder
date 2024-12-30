@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "preact/hooks";
-import { ComponentChild, ComponentChildren } from "preact";
+import type { ComponentChild, ComponentChildren } from "preact";
 import { createPortal } from "preact/compat";
 import { IS_BROWSER } from "$fresh/runtime.ts";
 
@@ -21,7 +21,7 @@ export function ActionModal({ trigger, ...props }: ActionModalProps) {
     setIsOpen(false);
   }, [props.postDeleteTimestamp]);
 
-  let modalRoot;
+  let modalRoot: HTMLElement | null | undefined;
   if (IS_BROWSER) {
     modalRoot = document && document.getElementById("modal-container");
   }

@@ -59,7 +59,7 @@ function NotificationContent(props: NotificationContentProps) {
 
   return (
     <div class={`notification ${typeToClass[props.message.type]}`}>
-      <button class="delete" onClick={props.onClose} />
+      <button class="delete" onClick={props.onClose} type="button" />
       {props.message.content}
     </div>
   );
