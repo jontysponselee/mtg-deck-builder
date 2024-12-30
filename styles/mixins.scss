@@ -2,13 +2,15 @@
 
 // https://github.com/jgthms/bulma/blob/master/sass/utilities/mixins.sass
 @mixin from($device) {
-    @media screen and (min-width: $device) {
-        @content;
-    }
+  @media screen and (min-width: $device) {
+    @content;
+  }
 }
 
 @mixin mobile-only {
-    @media screen and (max-width: calc(variables.$bulma-breakpoint-tablet - 1px)) {
-        @content;
-    }
+  @media screen and (max-width: calc(
+        variables.$bulma-breakpoint-tablet - 1px
+      )) {
+    @content;
+  }
 }

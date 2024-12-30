@@ -29,6 +29,7 @@ export default function DeckRow(
           <button
             class="deck-row-actions__edit"
             onClick={props.onIsEditing}
+            aria-label={`change name of ${props.deck.name}`}
           >
             <span class="icon">
               <i class="fa-solid fa-pen-to-square"></i>
@@ -46,7 +47,7 @@ export default function DeckRow(
               </>
             }
             trigger={(openModal) => (
-              <button class="deck-row-actions__delete" onClick={openModal}>
+              <button class="deck-row-actions__delete" onClick={openModal} aria-label={`remove ${props.deck.name}`}>
                 <span class="icon">
                   <i class="fas fa-trash-can"></i>
                 </span>

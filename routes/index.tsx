@@ -1,11 +1,14 @@
-import { defineRoute, Handlers } from "$fresh/server.ts";
+import { defineRoute, type Handlers } from "$fresh/server.ts";
 import { Head, Partial } from "$fresh/runtime.ts";
 
 import { AddDeckForm } from "../islands/deck/AddDeckForm.tsx";
 import { DeckList } from "../islands/deck/DeckList.tsx";
 import { Notification } from "../islands/Notification.tsx";
 import { DeckRepository } from "../src/domain/deck/DeckRepository.ts";
-import { genericError, ResponseMessage } from "../src/utils/ResponseMessage.tsx";
+import {
+  genericError,
+  type ResponseMessage,
+} from "../src/utils/ResponseMessage.tsx";
 import { DeckService } from "../src/domain/deck/DeckService.ts";
 
 interface ContextData {
@@ -49,6 +52,10 @@ export default defineRoute<ContextData>(async (_, ctx) => {
     <>
       <Head>
         <title>Decks</title>
+        <meta
+          name="description"
+          content="Organize, build, and track your Magic the Gathering (MTG) decks with ease. Designed for players of all levels, newcomers and pros alike, to manage collections and improve gameplay."
+        />
       </Head>
       <Partial name="notification">
         <Notification

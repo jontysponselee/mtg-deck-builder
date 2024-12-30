@@ -1,4 +1,5 @@
-import { type PageProps } from "$fresh/server.ts";
+import type { PageProps } from "$fresh/server.ts";
+import { asset } from "$fresh/runtime.ts";
 import { config } from "../config.ts";
 import { ModalContainer } from "../islands/ActionModal.tsx";
 
@@ -9,16 +10,23 @@ import { ModalContainer } from "../islands/ActionModal.tsx";
 export default function App({ Component }: PageProps) {
   return (
     <html lang="en">
-      <head>
+    <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>{config.appName}</title>
+
+        <link rel="preload" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css" as="style" />
+        <link rel="preload" href={asset("/styles.css")} as="style" />
+        <link rel="preload" href={"https://kit.fontawesome.com/a9ed7151df.js"} as="script" />
+
+
         <link
           rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css"
         />
-        <link rel="stylesheet" href="/styles.css" />
+        <link rel="stylesheet" href={asset("/styles.css")} />
         <script
+          defer
           src="https://kit.fontawesome.com/a9ed7151df.js"
           crossorigin="anonymous"
         >
